@@ -166,13 +166,17 @@ abc
 
 Lisp中的函数定义我们已经在上节给出（快速抢答：谁还记得请举手），在Lisp中采用如下形式描述一个函数：
 
+#+BEGIN_QUOTE
 (lambda (p1 p2 ... pn) e)
+#+END_QUOTE
 
 其中，pi为原子，在函数中称之为参数，e是表达式，也就是函数体。
 
 调用一个函数的方式如下：
 
+#+BEGIN_QUOTE
 ((lambda (p1 p2 ... pn) e) a1 a2 ... an)
+#+END_QUOTE
 
 其中ai为表达式，按照我们的惯例，称之为实参。
 
@@ -180,11 +184,15 @@ Lisp中的函数定义我们已经在上节给出（快速抢答：谁还记得�
 
 如果一个表达式的第一个元素是一个原子，但不是基本操作符（也就是我们先前提到的那7个），如：
 
+#+BEGIN_QUOTE
 (f a1 a2 ... an)
+#+END_QUOTE
 
 并且f的值是一个函数(lambda (p1 p2 ... pn) e)，则上述表达式等价于
 
+#+BEGIN_QUOTE
 ((lambda (p1 p2 ... pn) e) a1 a2 ... an)
+#+END_QUOTE
 
 看了这一段，可能大家都有点晕，到窗口去做几个深呼吸，然后回来做下面这个练习，看看这个表达式的结果是什么？
 
@@ -204,13 +212,17 @@ lambda这个词来源于lambda演算理论。lambda是什么？对于现在的�
 
 函数没有名字会带来一个问题，那就是你无法在函数中调用自身（好啦，我知道还有Y组合，不过这是一篇入门文章），所以Lisp提供了一种形式可以让你用一个标识符来引用函数：
 
+#+BEGIN_QUOTE
 (label f (lambda (p1 p2 ... pn) e))
+#+END_QUOTE
 
 这个表达式和前面的简单lambda表达式等价，但是在e中出现的所有f都会被替换为整个lambda表达式，也就是递归。
 
 同时，Lisp为它提供了一种简写形式：
 
+#+BEGIN_QUOTE
 (defun f (p1 p2 ... pn) e)
+#+END_QUOTE
 
 你可以开始写你的第一个有用的Lisp程序了，你打算写什么？（无论什么，只要不是Hello world就好）
 
@@ -236,11 +248,15 @@ Lisp的语法元素在前几集中已经基本讨论完毕，相比C#或Java数�
 
 可能有些读者已经想到了，取第二个元素可以采用如下形式：
 
+#+BEGIN_SRC emacs-lisp
 (car (cdr x))
+#+END_SRC
 
 同理，取第三个元素是这样的：
 
+#+BEGIN_SRC emacs-lisp
 (car (cdr (cdr x)))
+#+END_SRC
 
 事实上，这种组合在Lisp中经常要用到，为了方便，Lisp提供了一个通用模式——cxr，其中x为a或d的序列，来简记car和cdr的组合，例如：
 
@@ -266,11 +282,17 @@ Lisp的语法元素在前几集中已经基本讨论完毕，相比C#或Java数�
 | b |
 
 另外，使用(list e1 e2 ... en)来表示
+
+#+BEGIN_SRC emacs-lisp
 (cons e1 (cons e2 (... (cons en '())...)))
+#+END_SRC
 
 #+BEGIN_SRC emacs-lisp
 (cons 'a (cons 'b (cons 'c '())))
 #+END_SRC
+
+#+results:
+| a | b | c |
 
 #+BEGIN_SRC emacs-lisp
 (list 'a 'b 'c)
@@ -284,42 +306,59 @@ Lisp的语法元素在前几集中已经基本讨论完毕，相比C#或Java数�
 （注：某些函数在Common Lisp中已经存在，所以如果你想试验一下，给它们换个名字）
 
 1. (null x)，测试x是否为空表。例如：
-> (null 'a)
-()
-> (null '())
-t 
+   #+BEGIN_SRC emacs-lisp
+(null 'a)
+   #+END_SRC
+
+   #+results:
+
+   #+BEGIN_SRC emacs-lisp
+(null '())
+   #+END_SRC
+
+   #+results:
+   : t
 
 2. (and x y)，逻辑与，当且仅当x和y都不是空表时返回't，否则返回空表。
-> (and 'a 'b)
-t
-> (and (atom 'a) (eq 'b 'c))
-() 
+   #+BEGIN_SRC emacs-lisp
+(and 'a 'b)
+   #+END_SRC
 
+   #+results:
+   : b
+
+   #+BEGIN_SRC emacs-lisp
+(and (atom 'a) (eq 'b 'c))
+   #+END_SRC
+
+   #+results:
+
+ 
 3. (not x)，逻辑非，当x是空表时返回't，否则返回空表。（有人问我or在哪儿？）例如：
-> (not 'a)
-()
-> (not (eq 'a 'b))
-t 
+   > (not 'a)
+   ()
+   > (not (eq 'a 'b))
+   t 
 
 4. (append x y)，连接两个表x和y，注意它与cons和list之间的不同之处。例如：
-> (append '(a b) '(c d))
-(a b c d)
-> (append '() '(x y))
-(x y) 
+   > (append '(a b) '(c d))
+   (a b c d)
+   > (append '() '(x y))
+   (x y) 
 
 5. (pair x y)，这里x和y是两个长度相同的表，pair生成一个表，其中每个元素是x和y中相应位置上的元素组成的一个元素对，这个函数的返回值类似于其它语言中的map或dictionary的概念。例如：
-> (pair '(a b c) '(x y z))
-((a x) (b y) (c z)) 
+   > (pair '(a b c) '(x y z))
+   ((a x) (b y) (c z)) 
 
 6. (assoc x y)，其中x是一个原子，y是一个形如pair所返回的表，assoc在y中查找第一个左元素为x的元素对并返回。例如：
-> (assoc 'a '((a x) (b y)))
-x
-> (assoc 'a '((a (foo bar)) (b y) (c z)))
-(foo bar) 
+   > (assoc 'a '((a x) (b y)))
+   x
+   > (assoc 'a '((a (foo bar)) (b y) (c z)))
+   (foo bar) 
 
 7. (subst x y z)，在表z中将任意层次上出现的原子y都替换为表达式x。例如：
-> (subst '(x y) 'b '(a b (a b c) d))
-(a (x y) (a (x y) c) d)
+   > (subst '(x y) 'b '(a b (a b c) d))
+   (a (x y) (a (x y) c) d)
 
 下面我们给出这些常用函数的简单实现：
 
@@ -332,25 +371,35 @@ x
 (defun and (x y)
    (cond (x (cond (y 't) ('t '())))
          ('t '()))) 
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
 (defun not (x)
    (cond (x '())
          ('t 't))) 
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
 (defun append (x y)
    (cond ((null x) y)
          ('t (cons (car x) (append (cdr x) y))))) 
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
 (defun pair (x y)
    (cond ((and (null x) (null y)) '())
          ((and (not (atom x)) (not (atom y)))
           (cons (list (car x) (car y))
                 (pair (cdr) (cdr y)))))) 
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
 (defun assoc (x y)
    (cond ((eq (caar y) x) (cadar y))
          ('t (assoc x (cdr y))))) 
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
 (defun subst (x y z)
    (cond ((atom z)
          (cond ((eq z y) x)
@@ -363,7 +412,7 @@ x
 
 这一部分内容可以让你真正感受到Lisp的特色，与编写过程式语言的程序相比，编写Lisp程序需要一种完全不同的思维方式，也许这正是Lisp语言几十年来长盛不衰的真正原因吧。
 
-理解了这一部分，下一集中我们将领教一下Lisp的威力，我们将用Lisp编写一个Lisp解释器。如果你以前没有见过这个程序，我保证它一定会让你吃惊
+理解了这一部分，下一集中我们将领教一下Lisp的威力，我们将用Lisp编写一个Lisp解释器。如果你以前没有见过这个程序，我保证它一定会让你吃惊。
 
 * Lisp入门（五）
 
@@ -417,9 +466,11 @@ x
 eval有两个自变量：e是要求值的表达式，a是由一些赋给原子的值构成的表，这些值有点象函数调用中的参数。这个形如pair返回值的表叫做上下文，正是为了构造和搜索这种表我们才在前一章写了pair和assoc。
 
 eval的骨架是一个有四个子句的cond表达式，如何对表达式求值取决于它的类型，第一个分支处理原子，如果e是原子, 我们在上下文中寻找它的值：
+
 > (eval 'x '((x a) (y b))) a
 
 第二个分支是另一个cond，它处理形如(a)的表达式，其中a是原子。这包括所有的基本操作符，每个对应一条分支。
+
 > (eval '(eq 'a 'a) '()) t 
 
 > (eval '(cons x '(b c)) '((x a) (y b))) (a b c)
@@ -427,6 +478,7 @@ eval的骨架是一个有四个子句的cond表达式，如何对表达式求值
 这几个分支(除了quote)都调用eval来寻找自变量的值。
 
 最后两个分支更复杂些。为了求cond表达式的值我们调用了一个叫evcon的辅助函数。它递归地对cond分支进行求值，寻找第一个元素返回t的子句，如果找到了这样的子句，它返回此分支的第二个元素。
+
 > (eval '(cond ((atom x) 'atom) ('t 'list)) '((x '(a b)))) list 
 
 第二个分支的最后部分处理函数调用。它把原子替换为它的值（应该是lambda或label表达式）。然后对所得结果表达式求值。于是：
@@ -443,7 +495,7 @@ eval的最后两个cond分支处理第一个元素是lambda或label的函数调�
 
 (eval '((label firstatom (lambda (x) (cond ((atom x) x) ('t (firstatom (car x)))))) y) '((y ((a b) (c d)))))
 
-变为 
+变为： 
 
 (eval '((lambda (x) (cond ((atom x) x) ('t (firstatom (car x))))) y) '((firstatom (label firstatom (lambda (x) (cond ((atom x) x) ('t (firstatom (car x))))))) (y ((a b) (c d)))))
 
@@ -464,6 +516,7 @@ eval的最后两个cond分支处理第一个元素是lambda或label的函数调�
 我们在这里得到了一个非常优美的计算模型，eval函数实际上实现了整个语言，用它我们可以定义所需的任何其它函数。换句话说，我们现在有了一个自己的Lisp。
 
 （注：由此可见，递归下降的语法分析是多么美好啊，因为它意味着你可以用几十、最多不过一两百行程序搞定一个复杂的分析器，对比LALR你将更有体会）
+
 下面我们该去哪儿？这个问题，请读者自己去寻找答案。
 
 * Lisp入门（后记） 
