@@ -307,13 +307,13 @@ Lisp的语法元素在前几集中已经基本讨论完毕，相比C#或Java数�
 
 1. (null x)，测试x是否为空表。例如：
    #+BEGIN_SRC emacs-lisp
-(null 'a)
+   (null 'a)
    #+END_SRC
 
    #+results:
 
    #+BEGIN_SRC emacs-lisp
-(null '())
+   (null '())
    #+END_SRC
 
    #+results:
@@ -321,55 +321,55 @@ Lisp的语法元素在前几集中已经基本讨论完毕，相比C#或Java数�
 
 2. (and x y)，逻辑与，当且仅当x和y都不是空表时返回't，否则返回空表。
    #+BEGIN_SRC emacs-lisp
-(and 'a 'b)
+   (and 'a 'b)
    #+END_SRC
 
    #+results:
    : b
 
    #+BEGIN_SRC emacs-lisp
-(and (atom 'a) (eq 'b 'c))
+   (and (atom 'a) (eq 'b 'c))
    #+END_SRC
 
    #+results:
 
  
 3. (not x)，逻辑非，当x是空表时返回't，否则返回空表。（有人问我or在哪儿？）例如：
-   #+BEGIN_QUOTE
+   #+BEGIN_SRC emacs-lisp
    > (not 'a)
    ()
    > (not (eq 'a 'b))
    t 
-   #+END_QUOTE
+   #+END_SRC
 
 4. (append x y)，连接两个表x和y，注意它与cons和list之间的不同之处。例如：
-   #+BEGIN_QUOTE
+   #+BEGIN_SRC emacs-lisp
    > (append '(a b) '(c d))
    (a b c d)
    > (append '() '(x y))
    (x y) 
-   #+END_QUOTE
+   #+END_SRC
 
 5. (pair x y)，这里x和y是两个长度相同的表，pair生成一个表，其中每个元素是x和y中相应位置上的元素组成的一个元素对，这个函数的返回值类似于其它语言中的map或dictionary的概念。例如：
-   #+BEGIN_EXAMPLE
+   #+BEGIN_SRC emacs-lisp
    > (pair '(a b c) '(x y z))
    ((a x) (b y) (c z)) 
-   #+END_EXAMPLE
+   #+END_SRC
 
 6. (assoc x y)，其中x是一个原子，y是一个形如pair所返回的表，assoc在y中查找第一个左元素为x的元素对并返回。例如：
-   #+BEGIN_QUOTE
+   #+BEGIN_SRC emacs-lisp
    > (assoc 'a '((a x) (b y)))
    x
 
    > (assoc 'a '((a (foo bar)) (b y) (c z)))
    (foo bar) 
-   #+END_QUOTE
+   #+END_SRC
 
 7. (subst x y z)，在表z中将任意层次上出现的原子y都替换为表达式x。例如：
-   #+BEGIN_QUOTE
+   #+BEGIN_SRC emacs-lisp
    > (subst '(x y) 'b '(a b (a b c) d))
    (a (x y) (a (x y) c) d)
-   #+END_QUOTE
+   #+END_SRC
 
 下面我们给出这些常用函数的简单实现：
 
